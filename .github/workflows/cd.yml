@@ -1,31 +1,4 @@
-name: CD Pipeline
-
-on:
-  workflow_run:
-    workflows: ["CI Pipeline"]
-    types: [completed]
-    branches: [main]
-
-jobs:
-  deploy-to-azure:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      
-      - name: Deploy to Azure VM via SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.AZURE_VM_IP }}
-          username: azureuser
-          key: ${{ secrets.AZURE_SSH_KEY }}
-          script: |
-            cd smart-event-platform
-            git pull origin main
-            docker-compose down
-            docker-compose up -d --buildname: CD Pipeline (Render)
+name: CD Pipeline (Render)
 
 on:
   workflow_run:
@@ -44,5 +17,3 @@ jobs:
           curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
           -H "Accept: application/json" \
           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
-
-            docker ps
