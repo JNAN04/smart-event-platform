@@ -9,11 +9,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://wonderful-water-07646600f.3.azurestaticapps.net',
-    'https://wonderful-water-07646600f-preview.eastus2.3.azurestaticapps.net'
-  ],
+  origin:'*',
   credentials: true
 }));
 app.use(express.json());
